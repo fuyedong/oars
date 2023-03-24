@@ -1,6 +1,6 @@
 # oars
 
-[English Version](/xwsoul/oars/blob/main/READNE.md)
+[English Version](/xwsoul/oars/blob/main/README.md)
 
 ## 介绍
 
