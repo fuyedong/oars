@@ -1,0 +1,114 @@
+#!/bin/bash
+
+# Variable definitions
+# docker executable
+OPT_DOCKER_EXEC="/usr/bin/docker"
+# container name -n
+OPT_CONTAINER_NAME=""
+# container shell env -s
+OPT_CONTAINER_SHELL_ENV="/bin/sh -c"
+# container work dir -w
+OPT_CONTAINER_WORK_DIR="/"
+# container interactive mode -m
+OPT_CONTAINER_INTERACTIVE_MODE="-it"
+# full container command -c
+OPT_CONTAINER_COMMAND=""
+# run container command with prefix -r
+OPT_CONTAINER_RUNNING_PREFIX=""
+
+# load configuration
+CONFIG_PATHS=(
+  "/etc/oars.conf"
+  "/etc/oars"
+  "$HOME/.oars.conf"
+  "$HOME/.oars"
+  "$(pwd)/.oars.conf"
+  "$(pwd)/.oars"
+)
+for CONFIG_PATH in "${CONFIG_PATHS[@]}"; do
+  if [ -e "$CONFIG_PATH" ]; then
+    source "$CONFIG_PATH"
+    # or using dot "."
+    # . "$CONFIG_PATH"
+  fi
+done
+
+# check params
+check_value_option() {
+  if [ -z "$2" ]; then
+    echo "Error: $1 requires a value" >&2
+    return 1
+  elif [ "${2:0:1}" = "-" ]; then
+    echo "Error: $1 requires a value, but another option was provided" >&2
+    exit 1
+    return 1
+  else
+    echo "$2"
+    return 0
+  fi
+}
+
+check_param() {
+  if [ -z "$1" ]; then
+    echo "Error: $2 can not be empty" >&2
+    return 1
+  fi
+  return 0
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -n)
+      OPT_CONTAINER_NAME=$(check_value_option "$1" "$2") || exit 1
+      shift 2
+      ;;
+    -s)
+      OPT_CONTAINER_SHELL_ENV=$(check_value_option "$1" "$2") || exit 1
+      shift 2
+      ;;
+    -w)
+      OPT_CONTAINER_WORK_DIR=$(check_value_option "$1" "$2") || exit 1
+      shift 2
+      ;;
+    -m)
+      OPT_CONTAINER_INTERACTIVE_MODE=$(check_value_option "$1" "$2") || exit 1
+      shift 2
+      ;;
+    -c)
+      OPT_CONTAINER_COMMAND=$(check_value_option "$1" "$2") || exit 1
+      shift 2
+      ;;
+    -r)
+      if [ -z "${OPT_CONTAINER_RUNNING_PREFIX}" ]; then
+        echo '${OPT_CONTAINER_RUNNING_PREFIX} setting is requred for running command' >&2
+        exit 1
+      fi
+      # could be empty with param
+      RUNNING=$2
+      OPT_CONTAINER_COMMAND="${OPT_CONTAINER_RUNNING_PREFIX} ${RUNNING}"
+      if [ -z "${RUNNING}" ]; then
+        shift
+      else
+        shift 2
+      fi
+      ;;
+    --flag)
+      flag=true
+      shift
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+
+$(check_param "${OPT_CONTAINER_NAME}" 'OPT_CONTAINER_NAME') || exit 1
+
+if [ -n "${OPT_CONTAINER_COMMAND}" ]; then
+  OPT_CONTAINER_SHELL_ENV="${OPT_CONTAINER_SHELL_ENV} "
+fi
+
+# executing
+${OPT_DOCKER_EXEC} exec ${OPT_CONTAINER_INTERACTIVE_MODE} \
+  -w "${OPT_CONTAINER_WORK_DIR}" ${OPT_CONTAINER_NAME} \
+  ${OPT_CONTAINER_SHELL_ENV}"${OPT_CONTAINER_COMMAND}"
