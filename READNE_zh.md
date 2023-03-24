@@ -1,5 +1,7 @@
 # oars
 
+[English Version](/xwsoul/oars/blob/main/READNE.md)
+
 ## 介绍
 
 `oars` 是一个 Docker 容器命令的包装器, 该命令可以根据目录封装不同 docker 参数, 以满足简化常用命令在容器中执行的需要. `oars` 采用 Bash 编写，它允许用户通过命令行选项指定Docker容器的各种参数，如容器名称、工作目录、交互模式等。

@@ -1,5 +1,7 @@
 # oars
 
+[中文版](/xwsoul/oars/blob/main/READNE_zh.md)
+
 ## Introduction
 
 `oars` is a wrapper for Docker container commands that can encapsulate different Docker parameters based on the directory, meeting the need to simplify common command execution within containers. Written in Bash, `oars` allows users to specify various parameters of the Docker container through command line options, such as container name, working directory, interactive mode, and more.
