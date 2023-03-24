@@ -1,6 +1,6 @@
 # oars
 
-[中文版](/xwsoul/oars/blob/main/README_zh.md)
+[中文版](https://github.com/xwsoul/oars/blob/main/READNE_zh.md)
 
 ## Introduction
 
