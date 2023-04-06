@@ -78,3 +78,15 @@ oars -r 'test'
 ```
 
 这大大地简化了减少了需要执行命令的参数, 提高了调用效率.
+
+## 重启容器
+
+```shell
+oars restart
+```
+
+同样也支持 `-n` 参数
+
+```shell
+oars restart -n <container_name>
+```

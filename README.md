@@ -78,3 +78,15 @@ It is equivalent to executing:
 ```
 
 This greatly simplifies and reduces the parameters needed for executing commands, thus improving the invocation efficiency.
+
+## Restarting container
+
+```shell
+oars restart
+```
+
+Also supports the parameter `-n`
+
+```shell
+oars restart -n <container_name>
+```

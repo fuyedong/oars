@@ -16,6 +16,8 @@ OPT_CONTAINER_COMMAND=""
 # run container command with prefix -r
 OPT_CONTAINER_RUNNING_PREFIX=""
 
+FLAG_RESTART=0
+
 # load configuration
 CONFIG_PATHS=(
   "/etc/oars.conf"
@@ -40,7 +42,6 @@ check_value_option() {
     return 1
   elif [ "${2:0:1}" = "-" ]; then
     echo "Error: $1 requires a value, but another option was provided" >&2
-    exit 1
     return 1
   else
     echo "$2"
@@ -96,6 +97,10 @@ while [ "$#" -gt 0 ]; do
       flag=true
       shift
       ;;
+    restart)
+      FLAG_RESTART=1
+      shift
+      ;;
     *)
       shift
       ;;
@@ -103,6 +108,13 @@ while [ "$#" -gt 0 ]; do
 done
 
 $(check_param "${OPT_CONTAINER_NAME}" 'OPT_CONTAINER_NAME') || exit 1
+
+# restart container
+if [ $FLAG_RESTART > 0 ];then
+  echo -n "Restarting..."
+  ${OPT_DOCKER_EXEC} restart ${OPT_CONTAINER_NAME}
+  exit $?
+fi
 
 if [ -n "${OPT_CONTAINER_COMMAND}" ]; then
   OPT_CONTAINER_SHELL_ENV="${OPT_CONTAINER_SHELL_ENV} "
