@@ -15,8 +15,12 @@ OPT_CONTAINER_INTERACTIVE_MODE="-it"
 OPT_CONTAINER_COMMAND=""
 # run container command with prefix -r
 OPT_CONTAINER_RUNNING_PREFIX=""
-
+# logs lines
+OPT_LOG_LINES=0
+# restart container
 FLAG_RESTART=0
+# show container logs
+FLAG_LOGS=0
 
 # load configuration
 CONFIG_PATHS=(
@@ -93,12 +97,16 @@ while [ "$#" -gt 0 ]; do
         shift 2
       fi
       ;;
-    --flag)
-      flag=true
-      shift
+    -l)
+      OPT_LOG_LINES=$(check_value_option "$1" "$2") || exit 1
+      shift 2
       ;;
     restart)
       FLAG_RESTART=1
+      shift
+      ;;
+    logs)
+      FLAG_LOGS=1
       shift
       ;;
     *)
@@ -110,9 +118,19 @@ done
 $(check_param "${OPT_CONTAINER_NAME}" 'OPT_CONTAINER_NAME') || exit 1
 
 # restart container
-if [ $FLAG_RESTART > 0 ];then
+if (( FLAG_RESTART > 0 ));then
   echo -n "Restarting..."
   ${OPT_DOCKER_EXEC} restart ${OPT_CONTAINER_NAME}
+  exit $?
+fi
+
+# show container logs
+if (( FLAG_LOGS > 0 ));then
+  if (( OPT_LOG_LINES > 0 )); then
+    ${OPT_DOCKER_EXEC} logs -n ${OPT_LOG_LINES} ${OPT_CONTAINER_NAME}
+  else
+    ${OPT_DOCKER_EXEC} logs ${OPT_CONTAINER_NAME}
+  fi
   exit $?
 fi
 

@@ -14,6 +14,7 @@
 * `-m <interactive_mode>`: 指定容器的交互模式，默认为-it。
 * `-c <container_command>`: 指定在容器内执行的命令。如果指定了此参数，脚本会在容器内执行给定的命令。
 * `-r <running_command>`: 使用 `OPT_CONTAINER_RUNNING_PREFIX` 设置的前缀执行给定的命令。如果未设置前缀，则脚本会报错并退出。
+* `-l <line_numbers>` 显示指定行数的日志
 
 ## 配置文件
 
@@ -37,6 +38,7 @@
 * `OPT_CONTAINER_INTERACTIVE_MODE`: 容器的交互模式，默认为`-it`。
 * `OPT_CONTAINER_COMMAND`: 在容器内执行的命令，默认为空。在使用脚本时，可以使用 `-c` 选项指定要执行的命令。
 * `OPT_CONTAINER_RUNNING_PREFIX`: 运行容器命令的前缀，默认为空。在使用脚本时，可以使用 `-r` 选项指定要执行的命令，并将其与此前缀一起运行。
+* `OPT_LOG_LINES`: 每次日志打印的行数(不推荐配置)。
 
 ## 使用示例
 
@@ -89,4 +91,22 @@ oars restart
 
 ```shell
 oars restart -n <container_name>
+```
+
+## 查看容器日志
+
+```shell
+oars logs
+```
+
+同样也支持 `-n` 参数
+
+```shell
+oars logs -n <container_name>
+```
+
+参数 `-l` 显示指定行数的日志
+
+```shell
+oars logs -l <n>
 ```

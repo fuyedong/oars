@@ -14,6 +14,7 @@
 * `-m <interactive_mode>`: Specifies the interactive mode of the container, with a default value of -it.
 * `-c <container_command>`: Specifies the command to be executed within the container. If this parameter is specified, the script will execute the given command within the container.
 * `-r <running_command>`: Executes the given command with the prefix set by OPT_CONTAINER_RUNNING_PREFIX. If the prefix is not set, the script will report an error and exit.
+* `-l <line_numbers>`: Show the log with the specified number of lines
 
 ## Configuration Files
 
@@ -37,6 +38,7 @@ Settings in the configuration files will override the default settings in the sc
 * `OPT_CONTAINER_INTERACTIVE_MODE`: The interactive mode of the container, defaulting to `-it`.
 * `OPT_CONTAINER_COMMAND`: The command to be executed within the container, defaulting to empty. When using the script, the command can be specified using the `-c` option.
 * `OPT_CONTAINER_RUNNING_PREFIX`: The prefix for running the container command, defaulting to empty. When using the script, the command can be specified using the `-r` option, and it will be run together with this prefix.
+* `OPT_LOG_LINES`: The number of lines printed each time the log is shown (Not recommended to configure).
 
 ## Examples
 
@@ -79,7 +81,7 @@ It is equivalent to executing:
 
 This greatly simplifies and reduces the parameters needed for executing commands, thus improving the invocation efficiency.
 
-## Restarting container
+## Restart container
 
 ```shell
 oars restart
@@ -89,4 +91,22 @@ Also supports the parameter `-n`
 
 ```shell
 oars restart -n <container_name>
+```
+
+## Show container logs
+
+```shell
+oars logs
+```
+
+Also supports the parameter `-n`
+
+```shell
+oars logs -n <container_name>
+```
+
+The parameter `-l` show log with specified number of lines
+
+```shell
+oars logs -l <n>
 ```
